@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-config
+  namespace: {{ .Values.namespace }}
+data:
+  # Logging level
+  LOG_LEVEL: "{{ .Values.env.LOG_LEVEL }}"
+
+  # Redis Configuration
+  REDIS_HOST: "{{ .Values.env.REDIS_HOST }}"
+  REDIS_PORT: "{{ .Values.env.REDIS_PORT }}"
+
+  # Job Manager Configuration
+  MAX_RETRIES: "{{ .Values.env.MAX_RETRIES }}"
+  THRESHOLD_TIMEOUT: "{{ .Values.env.THRESHOLD_TIMEOUT }}"
+  PROGRESS_THRESHOLD: "{{ .Values.env.PROGRESS_THRESHOLD }}"
+
+  # Kubernetes Configuration for Main Pod Tracking
+  KUBERNETES_NAMESPACE: "{{ .Values.kubernetes.namespace }}"
+  LABEL_SELECTOR: "{{ .Values.kubernetes.labelSelector }}"
+
+  # Prometheus Scraping
+  PROMETHEUS_SCRAPE: "{{ .Values.env.PROMETHEUS_SCRAPE }}"

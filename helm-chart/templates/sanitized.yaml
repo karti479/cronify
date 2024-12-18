@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: -config
+  namespace: 
+data:
+  # Logging level
+  LOG_LEVEL: ""
+
+  # Redis Configuration
+  REDIS_HOST: ""
+  REDIS_PORT: ""
+
+  # Job Manager Configuration
+  MAX_RETRIES: ""
+  THRESHOLD_TIMEOUT: ""
+  PROGRESS_THRESHOLD: ""
+
+  # Kubernetes Configuration for Main Pod Tracking
+  KUBERNETES_NAMESPACE: ""
+  LABEL_SELECTOR: ""
+
+  # Prometheus Scraping
+  PROMETHEUS_SCRAPE: ""

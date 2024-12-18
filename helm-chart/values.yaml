@@ -1,0 +1,100 @@
+# Number of replicas (pods) to deploy for the Job State Manager.
+# Higher replicaCount improves availability and load distribution.
+replicaCount: 2
+
+# Kubernetes namespace in which resources will be deployed.
+# Ensures resources are scoped to a specific environment.
+namespace: "default"
+
+# Docker image configuration for the Job State Manager.
+image:
+  # Docker repository for the application image.
+  repository: your-docker-repo/job-state-manager
+  # Docker image tag/version to be used (e.g., latest, 1.0.0).
+  tag: latest
+  # Kubernetes image pull policy. Options: Always, IfNotPresent, Never.
+  pullPolicy: IfNotPresent
+
+# Resource limits and requests for the application pods.
+resources:
+  # Maximum resources the pod is allowed to consume.
+  limits:
+    cpu: 500m      # Maximum CPU usage (e.g., 500m = 0.5 CPU cores).
+    memory: 512Mi  # Maximum memory usage (e.g., 512Mi = 512 Megabytes).
+  # Minimum resources the pod is guaranteed to be allocated.
+  requests:
+    cpu: 250m      # Requested CPU usage.
+    memory: 256Mi  # Requested memory usage.
+
+# Environment variables for configuring the application.
+env:
+  # Logging level for the application. Options: DEBUG, INFO, WARNING, ERROR.
+  LOG_LEVEL: "INFO"
+  # Hostname of the Redis server used by the application.
+  REDIS_HOST: "redis"
+  # Port number for connecting to the Redis server.
+  REDIS_PORT: 6379
+  # Slack webhook URL for sending notifications.
+  SLACK_WEBHOOK_URL: "<Your Slack Webhook URL>"
+  # Enable or disable Prometheus metrics scraping. Options: "true", "false".
+  PROMETHEUS_SCRAPE: "true"
+  # Maximum number of retries allowed for a job before marking it as failed.
+  MAX_RETRIES: 3
+  # Maximum allowed time (in seconds) for a job to remain in progress.
+  THRESHOLD_TIMEOUT: 300
+  # Minimum progress required over the threshold time to avoid marking as stuck.
+  PROGRESS_THRESHOLD: 10
+
+# Configuration for Redis dependency.
+redis:
+  # Enable or disable deployment of Redis as part of the chart.
+  enabled: true
+  # Hostname for an external Redis instance, if used.
+  host: "redis"
+  # Port for connecting to the Redis server.
+  port: 6379
+
+# Configuration for the Kubernetes service that exposes the application.
+service:
+  # Type of Kubernetes service. Options: ClusterIP, NodePort, LoadBalancer.
+  type: ClusterIP
+  # Port on which the application will be exposed.
+  port: 8080
+
+# Configuration for Prometheus metrics scraping.
+prometheus:
+  # Enable or disable Prometheus monitoring for the application.
+  enabled: true
+  # Path where Prometheus scrapes metrics (e.g., /metrics).
+  metricsPath: "/metrics"
+  # Port on which Prometheus scrapes metrics.
+  port: 8080
+  # Interval at which Prometheus scrapes metrics.
+  scrapeInterval: "15s"
+
+# Kubernetes-specific configuration for tracking the Main Pod.
+kubernetes:
+  # Namespace where the Main Pod is running.
+  namespace: "default"
+  # Label selector for identifying the Main Pod.
+  labelSelector: "app=main-pod"
+
+# Node selector for scheduling pods on specific nodes.
+# Specify key-value pairs (e.g., disktype: ssd) to restrict deployment.
+nodeSelector: {}
+
+# Tolerations for taints on nodes to allow pods to be scheduled on them.
+# Define an array of toleration objects.
+tolerations: []
+
+# Pod affinity and anti-affinity rules for scheduling.
+# Define custom rules for co-locating or avoiding certain pods.
+affinity: {}
+
+# Resource requests and limits for individual containers.
+resources: {}
+
+# RBAC (Role-Based Access Control) configuration for the chart.
+rbac:
+  # Enable or disable RBAC resources (roles, role bindings).
+  create: true

@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-deployment
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ .Chart.Name }}
+    release: {{ .Release.Name }}
+  annotations:
+    prometheus.io/scrape: "{{ .Values.prometheus.enabled }}"
+    prometheus.io/port: "{{ .Values.prometheus.port }}"
+    prometheus.io/path: "{{ .Values.prometheus.metricsPath }}"
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}
+      annotations:
+        prometheus.io/scrape: "{{ .Values.prometheus.enabled }}"
+        prometheus.io/port: "{{ .Values.prometheus.port }}"
+        prometheus.io/path: "{{ .Values.prometheus.metricsPath }}"
+    spec:
+      containers:
+        - name: job-state-manager
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.prometheus.port }}
+          env:
+            - name: LOG_LEVEL
+              value: "{{ .Values.env.LOG_LEVEL }}"
+            - name: REDIS_HOST
+              value: "{{ .Values.env.REDIS_HOST }}"
+            - name: REDIS_PORT
+              value: "{{ .Values.env.REDIS_PORT }}"
+            - name: MAX_RETRIES
+              value: "{{ .Values.env.MAX_RETRIES }}"
+            - name: THRESHOLD_TIMEOUT
+              value: "{{ .Values.env.THRESHOLD_TIMEOUT }}"
+            - name: PROGRESS_THRESHOLD
+              value: "{{ .Values.env.PROGRESS_THRESHOLD }}"
+            - name: SLACK_WEBHOOK_URL
+              valueFrom:
+                secretKeyRef:
+                  name: slack-secret
+                  key: webhook-url
+            - name: KUBERNETES_NAMESPACE
+              value: "{{ .Values.kubernetes.namespace }}"
+            - name: LABEL_SELECTOR
+              value: "{{ .Values.kubernetes.labelSelector }}"
+            - name: PROMETHEUS_SCRAPE
+              value: "{{ .Values.env.PROMETHEUS_SCRAPE }}"
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
