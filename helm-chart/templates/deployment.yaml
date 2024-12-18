@@ -54,5 +54,9 @@ spec:
               value: "{{ .Values.kubernetes.labelSelector }}"
             - name: PROMETHEUS_SCRAPE
               value: "{{ .Values.env.PROMETHEUS_SCRAPE }}"
+            - name: REDIS_HOST
+              value: "{{ .Release.Name }}-redis"
+            - name: REDIS_PORT
+              value: "6379"
           resources:
             {{- toYaml .Values.resources | nindent 12 }}

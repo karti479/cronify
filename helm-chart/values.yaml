@@ -53,6 +53,14 @@ redis:
   host: "redis"
   # Port for connecting to the Redis server.
   port: 6379
+  image: redis:6.2
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 250m
+    limits:
+      memory: 512Mi
+      cpu: 500m
 
 # Configuration for the Kubernetes service that exposes the application.
 service:
@@ -102,3 +110,6 @@ resources: {}
 rbac:
   # Enable or disable RBAC resources (roles, role bindings).
   create: true
+service:
+  type: ClusterIP   # Change to NodePort or LoadBalancer if needed
+  port: 8080        # The port on which the service will expose the app
