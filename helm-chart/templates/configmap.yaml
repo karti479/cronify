@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Release.Name }}-config
+  name: {{ .Release.Name | default "cronify" }}-config  # Default value if .Release.Name is empty
   namespace: {{ .Values.namespace }}
 data:
   # Logging level

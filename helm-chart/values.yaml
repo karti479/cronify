@@ -4,12 +4,12 @@ replicaCount: 2
 
 # Kubernetes namespace in which resources will be deployed.
 # Ensures resources are scoped to a specific environment.
-namespace: "default"
+namespace: "cronify"
 
 # Docker image configuration for the Job State Manager.
 image:
   # Docker repository for the application image.
-  repository: your-docker-repo/job-state-manager
+  repository: kartiksingh01/cronify
   # Docker image tag/version to be used (e.g., latest, 1.0.0).
   tag: latest
   # Kubernetes image pull policy. Options: Always, IfNotPresent, Never.
@@ -82,6 +82,10 @@ kubernetes:
 # Node selector for scheduling pods on specific nodes.
 # Specify key-value pairs (e.g., disktype: ssd) to restrict deployment.
 nodeSelector: {}
+
+ingress:
+  enabled: false       # Set to true to enable ingress
+  host: "example.com"  # Replace with your domain or host
 
 # Tolerations for taints on nodes to allow pods to be scheduled on them.
 # Define an array of toleration objects.
